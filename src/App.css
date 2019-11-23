@@ -2,6 +2,7 @@
   height: 40vmin;
 }
 .App-header {
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
