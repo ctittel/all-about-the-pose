@@ -19,9 +19,10 @@ import dat from 'dat.gui';
 import Stats from 'stats.js';
 
 import {drawBoundingBox, drawKeypoints, drawSkeleton, isMobile, toggleLoadingUI, tryResNetButtonName, tryResNetButtonText, updateTryResNetButtonDatGuiCss} from './demo_util';
+import { getPositivePatterns } from 'fast-glob/out/managers/tasks';
 
-const videoWidth = 600;
-const videoHeight = 500;
+const videoWidth = 600; //600 default
+const videoHeight = 500; //500 default
 const stats = new Stats();
 
 /**
@@ -382,7 +383,7 @@ function detectPoseInRealTime(video, net) {
     // Begin monitoring code for frames per second
     stats.begin();
 
-    let poses = [];
+    let poses = []; 
     let minPoseConfidence;
     let minPartConfidence;
     switch (guiState.algorithm) {
@@ -420,7 +421,9 @@ function detectPoseInRealTime(video, net) {
       ctx.restore();
     }
 
-    console.log(poses)
+    //console.log(poses)
+    //if(poses.length > 0)
+    //funPose(poses[0]); //worked with single-pose better performance 
 
     // For each pose (i.e. person) detected in an image, loop through the poses
     // and draw the resulting skeleton and keypoints if over certain confidence
@@ -446,6 +449,57 @@ function detectPoseInRealTime(video, net) {
   }
 
   poseDetectionFrame();
+}
+
+
+function funPose(pose){
+  //console.log(pose);
+  //console.log(getPosePart(pose,"nose"));
+  console.log(distParts(pose,"nose","leftEye"));
+}
+
+//Returns the keypoint for a part
+function getPosePart(pose,part){
+  for(let i = 0; i < 17; i++){
+    if(pose.keypoints[i].part.localeCompare(part) == 0)
+      return pose.keypoints[i];
+  }
+  console.log("Wrong input in part!");
+}
+
+function getPosePos(pose,part){
+    return getPosePart(pose,part).position;
+}
+
+//Function returns the score if the score is important enough
+function getPartScore(pose,part){
+    let suff = 1.0; // Is the point important enough?
+    let score = getPosePart(pose,part).score;
+    if(score < suff)
+      return -1;
+    return score;
+}
+
+
+function distParts(pose,part1,part2){
+  if(part1.localeCompare(part2) == 0)
+    return 0;
+    
+  let pos1 = getPosePos(pose,part1);
+  let pos2 = getPosePos(pose,part2);
+  
+  var a = pos1.x - pos2.x;
+  var b = pos1.y - pos2.y;
+  return Math.sqrt( a*a + b*b );
+}
+
+//returns the angel between (part1pivot) (part2pivot)
+function angleParts(pose,part1,part2,pivot){
+  let dist1 = distParts(part1,pivot);
+  let dist2 = distParts(part2,pivot);
+  //pos to the 0,0 coordinate
+  let pos1 = getPosePos(pose,"part1");
+
 }
 
 /**
