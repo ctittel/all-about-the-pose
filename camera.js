@@ -426,8 +426,9 @@ function detectPoseInRealTime(video, net) {
     }
 
     //console.log(poses)
-    //if(poses.length > 0)
-    //funPose(poses[0]); //worked with single-pose better performance 
+    //console.log("Before");
+    if(poses.length > 0)
+      funPose(poses[0]); //worked with single-pose better performance 
 
     // For each pose (i.e. person) detected in an image, loop through the poses
     // and draw the resulting skeleton and keypoints if over certain confidence
@@ -459,7 +460,7 @@ function detectPoseInRealTime(video, net) {
 function funPose(pose){
   //console.log(pose);
   //console.log(getPosePart(pose,"nose"));
-  console.log(distParts(pose,"nose","leftEye"));
+  console.log(angleParts(pose,"leftEye","rightEye","nose"));
 }
 
 //Returns the keypoint for a part
@@ -468,7 +469,7 @@ function getPosePart(pose,part){
     if(pose.keypoints[i].part.localeCompare(part) == 0)
       return pose.keypoints[i];
   }
-  console.log("Wrong input in part!");
+  console.log("Wrong input in part! You wrote: " + part);
 }
 
 function getPosePos(pose,part){
@@ -497,13 +498,29 @@ function distParts(pose,part1,part2){
   return Math.sqrt( a*a + b*b );
 }
 
-//returns the angel between (part1pivot) (part2pivot)
+//returns the angle between (part1pivot) (part2pivot)
 function angleParts(pose,part1,part2,pivot){
-  let dist1 = distParts(part1,pivot);
-  let dist2 = distParts(part2,pivot);
-  //pos to the 0,0 coordinate
-  let pos1 = getPosePos(pose,"part1");
+  
+  let dist1 = distParts(pose,part1,pivot);
+  let dist2 = distParts(pose,part2,pivot);
 
+  //console.log("Test1");
+  //pos to the 0,0 coordinate
+  let pos1x = getPosePos(pose,part1).x - getPosePos(pose,pivot).x;
+  let pos1y = getPosePos(pose,part1).y - getPosePos(pose,pivot).y;
+
+  let pos2x = getPosePos(pose,part2).x - getPosePos(pose,pivot).x;
+  let pos2y = getPosePos(pose,part2).y - getPosePos(pose,pivot).y;
+
+  //console.log("Test2");
+
+  let dotproduct = pos1x * pos2x + pos1y * pos2y;
+  let muldist = dist1 * dist2;
+  //console.log("Test3");
+  let radians =  Math.acos(dotproduct / muldist);
+  //console.log("Test4");
+  return radians * (180/Math.PI);
+  
 }
 
 /**
