@@ -1,5 +1,6 @@
 import { updateSimulation } from './simulationStartStop';
 import { isNameStartChar } from 'xmlchars/xml/1.0/ed5';
+import { getPositivePatterns } from 'fast-glob/out/managers/tasks';
 
 const poses = []; // all poses recorded
 
@@ -50,12 +51,22 @@ function isStart(pose){
   var anyLeft = angleParts(pose, "leftWrist", "leftShoulder", "leftElbow");
   var anyRight = angleParts(pose, "rightWrist", "rightShoulder", "rightElbow");
 
-  //var score = (getPartScore(pose,"leftWrist") + getPartScore(pose,"leftShoulder") + getPartScore(pose,"leftElbow")) / 3
+  var score = (getPartScore(pose,"leftWrist") + getPartScore(pose,"leftShoulder") + getPartScore(pose,"leftElbow")) / 3
+
+  /*
+  var slS = getPartScore(pose,"leftShoulder");
+  var slW = getPartScore(pose,"leftWrist");
+  var slE = getPartScore(pose,"leftElbow");
+
+  console.log("leftShoulder: " + slS+ " leftWrist:" + slW + " leftElbow:" +slE);
+  */
+
+  //console.log(score);
 
   if(anyLeft > 150 && anyRight > 150)
-    return true;
+    return "True with accuracy: " + score;
     
-  return false;
+  return "Wrong with accuracy: " + score;
 }
 
 
@@ -121,11 +132,11 @@ function getPosePos(pose,part){
 function getPartScore(pose,part){
     let suff = 1.0; // Is the point important enough?
     let score = getPosePart(pose,part).score;
-    /*
+    
     if(score < suff)
-      return -1;
-    */
-    return score;
+      return score;
+    
+    return -1;
 }
 
 
