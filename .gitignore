@@ -10,3 +10,4 @@ yalc.lock
 .yalc
 **/.DS_Store
 build
+build/
