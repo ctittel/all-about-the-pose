@@ -420,8 +420,6 @@ function detectPoseInRealTime(video, net) {
       ctx.restore();
     }
 
-    console.log(poses)
-
     // For each pose (i.e. person) detected in an image, loop through the poses
     // and draw the resulting skeleton and keypoints if over certain confidence
     // scores
