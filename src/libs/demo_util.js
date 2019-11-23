@@ -14,12 +14,14 @@
  * limitations under the License.
  * =============================================================================
  */
-import * as posenet from '@tensorflow-models/posenet';
+import * as posenet from '@tensorflow-models/posenet/dist';
 import * as tf from '@tensorflow/tfjs';
 
 const color = 'aqua';
 const boundingBoxColor = 'red';
 const lineWidth = 2;
+
+console.log('>>> ', posenet.singlePose);
 
 export const tryResNetButtonName = 'tryResNetButton';
 export const tryResNetButtonText = '[New] Try ResNet50';
@@ -60,16 +62,16 @@ export function updateTryResNetButtonDatGuiCss() {
 /**
  * Toggles between the loading UI and the main canvas UI.
  */
-export function toggleLoadingUI(
-    showLoadingUI, loadingDivId = 'loading', mainDivId = 'main') {
-  if (showLoadingUI) {
-    document.getElementById(loadingDivId).style.display = 'block';
-    document.getElementById(mainDivId).style.display = 'none';
-  } else {
-    document.getElementById(loadingDivId).style.display = 'none';
-    document.getElementById(mainDivId).style.display = 'block';
-  }
-}
+// export function toggleLoadingUI(
+//     showLoadingUI, loadingDivId = 'loading', mainDivId = 'main') {
+//   if (showLoadingUI) {
+//     document.getElementById(loadingDivId).style.display = 'block';
+//     document.getElementById(mainDivId).style.display = 'none';
+//   } else {
+//     document.getElementById(loadingDivId).style.display = 'none';
+//     document.getElementById(mainDivId).style.display = 'block';
+//   }
+// }
 
 function toTuple({y, x}) {
   return [y, x];
