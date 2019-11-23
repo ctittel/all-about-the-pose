@@ -20,7 +20,7 @@ import Stats from 'stats.js';
 
 import {drawBoundingBox, drawKeypoints, drawSkeleton, isMobile, toggleLoadingUI, tryResNetButtonName, tryResNetButtonText, updateTryResNetButtonDatGuiCss} from './demo_util';
 import { getPositivePatterns } from 'fast-glob/out/managers/tasks';
-import { calcPoses }   from './pose';
+import { updatePoses }   from './pose';
 
 const videoWidth = 600; //600 default
 const videoHeight = 500; //500 default
@@ -426,7 +426,7 @@ function detectPoseInRealTime(video, net) {
     //console.log(poses)
     
     if(poses.length > 0)
-      calcPoses(poses[0]); //worked with single-pose better performance 
+      updatePoses(poses[0]); //worked with single-pose better performance 
 
     // For each pose (i.e. person) detected in an image, loop through the poses
     // and draw the resulting skeleton and keypoints if over certain confidence
