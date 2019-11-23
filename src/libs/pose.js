@@ -24,6 +24,10 @@ export const updatePoses = (pose) => {
   updateSimulation();
   if (!ended) {
     if (start && !stop) {
+<<<<<<< HEAD
+=======
+      // console.log(movSectionCheck(pose, "start"));
+>>>>>>> 458e6d9d68add9c675604f2f487dce6bec6f8736
       poses.push(pose);
     }
     else if (start && stop) {
