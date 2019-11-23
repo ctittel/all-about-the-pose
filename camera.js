@@ -407,7 +407,7 @@ function detectPoseInRealTime(video, net) {
         });
 
         poses = poses.concat(all_poses);
-        printStuff(poses);
+    
         minPoseConfidence = +guiState.multiPoseDetection.minPoseConfidence;
         minPartConfidence = +guiState.multiPoseDetection.minPartConfidence;
         break;
@@ -424,7 +424,7 @@ function detectPoseInRealTime(video, net) {
     }
 
     //console.log(poses)
-    console.log("Before");
+    
     if(poses.length > 0)
       calcPoses(poses[0]); //worked with single-pose better performance 
 
