@@ -1,5 +1,5 @@
 
-const stuff = [];
+const calc = [];
 
 export const hello = () => {
   console.log('hello');
@@ -13,8 +13,8 @@ export const addStuff = (st) => {
   stuff = [...stuff, st];
 }
 
-export const calcPoses = (poses) => {
-  // calculate poses here..
+export const calcPoses = (pose) => {
+  funPose(pose);
 }
 
 function funPose(pose){
