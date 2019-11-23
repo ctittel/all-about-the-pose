@@ -20,10 +20,13 @@ import Stats from 'stats.js';
 
 import {drawBoundingBox, drawKeypoints, drawSkeleton, isMobile, toggleLoadingUI, tryResNetButtonName, tryResNetButtonText, updateTryResNetButtonDatGuiCss} from './demo_util';
 import { getPositivePatterns } from 'fast-glob/out/managers/tasks';
+import {hello, printStuff} from './pose';
 
 const videoWidth = 600; //600 default
 const videoHeight = 500; //500 default
 const stats = new Stats();
+
+hello();
 
 /**
  * Loads a the camera to be used in the demo
@@ -406,6 +409,7 @@ function detectPoseInRealTime(video, net) {
         });
 
         poses = poses.concat(all_poses);
+        printStuff(poses);
         minPoseConfidence = +guiState.multiPoseDetection.minPoseConfidence;
         minPartConfidence = +guiState.multiPoseDetection.minPartConfidence;
         break;
