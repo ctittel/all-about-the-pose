@@ -1,27 +1,86 @@
 <!DOCTYPE html>
 <html>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <style>
-/* Applies to the entire body of the HTML document (except where overridden by more specific
+    /* Applies to the entire body of the HTML document (except where overridden by more specific
 selectors). */
-body {
-  margin: 25px;
-  background-color: rgb(240,240,240);
-  font-family: arial, sans-serif;
-  font-size: 14px;
-}
+    body {
+        margin: 25px;
+        background-color: rgb(240, 240, 240);
+        font-family: arial, sans-serif;
+        font-size: 14px;
+    }
 
-/* Applies to all <h1>...</h1> elements. */
-h1 {
-  font-size: 35px;
-  font-weight: normal;
-  margin-top: 5px;
-}
+    /* Applies to all <h1>...</h1> elements. */
+    h1 {
+        font-size: 35px;
+        font-weight: normal;
+        margin-top: 5px;
+    }
 
-/* Applies to all elements with <... class="someclass"> specified. */
-.someclass { color: red; }
+    /* Applies to all elements with <... class="someclass"> specified. */
+    .someclass {
+        color: red;
+    }
 
-/* Applies to the element with <... id="someid"> specified. */
-#someid { color: green; }
+    /* Applies to the element with <... id="someid"> specified. */
+    #someid {
+        color: green;
+    }
+
+    /* Style the tab */
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+    /* Style the buttons that are used to open the tab content */
+    .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+    }
+
+    /* Change background color of buttons on hover */
+    .tab button:hover {
+        background-color: #ddd;
+    }
+
+    /* Create an active/current tablink class */
+    .tab button.active {
+        background-color: #ccc;
+    }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+
+    .tabcontent {
+        animation: fadeEffect 1s;
+        /* Fading effect takes 1 second */
+    }
+
+    /* Go from zero to full opacity */
+    @keyframes fadeEffect {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
 </style>
 
 
@@ -95,7 +154,13 @@ h1 {
             float: left;
         }
     </style>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        $(function () {
+            $("#tabs").tabs();
+        });
+    </script>
 </head>
 
 <body>
@@ -118,18 +183,35 @@ h1 {
         </video>
         <canvas id="output" />
     </div>
-    <div class="footer">
-        <div class="footer-text">
-            <p>
-                PoseNet runs with either a <strong>single-pose</strong> or <strong>multi-pose</strong> detection
-                algorithm. The single person pose detector is faster and more accurate but requires only one subject
-                present in the image.
-                <br>
-                <br> The <strong>output stride</strong> and <strong>input resolution</strong> have the largest effects
-                on accuracy/speed. A <i>higher</i> output stride results in lower accuracy but higher speed. A
-                <i>higher</i> image scale factor results in higher accuracy but lower speed. </p>
+    <div id="tabs">
+        <h2>Modes</h2>
+        <p>Select the tab with the mode you want to use</p>
+        <ul>
+            <li><a href="#tabs-1">Push Up</a></li>
+            <li><a href="#tabs-2">Floss Dance</a></li>
+            <li><a href="#tabs-3">The answer to everything</a></li>
+            <li><a href="#tabs-4">Nothing to read here</a></li>
+        </ul>
+        <div id="tabs-1">
+            <p>Checks if the form of your pushups is correct</p>
+        </div>
+        <div id="tabs-2">
+            <p>Checks if the form of your floss dance is correct</p>
+        </div>
+        <div id="tabs-3">
+            <p>42</p>
+        </div>
+        <div id="tabs-4">
+            <p>Nothing</p>
         </div>
     </div>
+
+    <!-- <div class="footer">
+        <div class="footer-text">
+            <p>
+                Copyright 193BC - 2019 Luke Skywalker - All rights reserved
+        </div>
+    </div> -->
     <script src="camera.js"></script>
 </body>
 
