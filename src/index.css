@@ -12,3 +12,6 @@ code {
     monospace;
 }
 
+div > div > canvas {
+  display: none !important;
+}
