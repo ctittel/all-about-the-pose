@@ -22,8 +22,8 @@ import {drawBoundingBox, drawKeypoints, drawSkeleton, isMobile, tryResNetButtonN
 import { getPositivePatterns } from 'fast-glob/out/managers/tasks';
 import { updatePoses }   from './pose';
 
-const videoWidth = window.innerWidth <= 300 ? 300 : window.innerWidth - 100; //600 default
-const videoHeight = 500; //500 default
+const videoWidth = 360;
+const videoHeight = 460; //500 default
 const stats = new Stats();
 
 /**
