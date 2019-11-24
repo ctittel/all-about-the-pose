@@ -9,8 +9,12 @@ Enabling people to master complex movements without a professional trainer, for 
 We also want to enable blind people to master those same movements without human help. The computer will give the user audible cues to correct their poses.
 
 ## What it does
-In the first stage it records movements, for example a series of pushups.
-Those observations are then analyzed and the user gets improvement advice.
+AllAboutThatPose observes movements (for example Push-Ups) as a sequence of poses. 
+The poses are then analyzed with modern computer vision and deep learning technology to give the user valuable feedback for improvement.
+
+Blind users can interact with the app through text-to-speech and speech recognition technology.
+
+So our application can replace a human trainer for the movements it knows and can even give better improvement advice.
 
 ## How we built it
 We used complex, state-of-the-art, deep learning algorithms for computer vision.
@@ -19,13 +23,16 @@ We used complex, state-of-the-art, deep learning algorithms for computer vision.
 Highly complex mathematical problems.
 
 ## Accomplishments that we are proud of
-
+That we managed to combine many different complex technologies into a working product.
 
 ## What we learned
-Nothing, we were born perfect.
+Valuable insight in state-of-the-art computer vision techniques.
 
 ## What's next for AllAboutThatPose
-World domination
+Expand AllAboutThatPose to be able to analyze movements from all areas of life, for example:
+- Sports: Deadlifts, long-jump, etc.
+- Dances
+- In the workplace, to teach employees new manual tasks
 
 ## Built With
-passion
+With web technologies, deep learning and computer vision techniques.
