@@ -31,38 +31,159 @@ var ended = false;
 //First
 export const updatePoses = (pose) => {
   //updateSimulation();
+  //console.log(wristDistace(pose));
+  //console.log(showFace(pose));
   if (!ended) {
     if (start && !stop) {
       poses.push(pose);
     }
     else if (start && stop) {
       console.log("Start calculating the Data...");
+      /*
       console.log(showData());
       console.log("------");
       console.log(groupSectionPoses(poses));
       console.log("-------");
       console.log(groupMotion(poses));
+      showIt(poses);
+      */
+      console.log(getStringData());
       console.log("Finish calculating the Data...");
       ended = true;
     }
   }
 }
 
-//Ändern weil Objercdt
-// yess
-function showData() {
-  if (poses && poses != []) {
-    let sP = addSectionPoses(poses);
-    for (let i = 0; i < sP.length; i++) {
-      console.log("Index: " + i + ", " + sP[i].section);
-    }
-  } else {
-    console.log("showData called but poses is empty");
-  }
+function showIt(poses){
+  var gM = groupMotion(poses);
+  for(let i = 0; i<gM.length; i++)
+    console.log(aveWristDistance(gM[i]));
 }
+
+function showFace(pose){
+  var nose = getPartScore(pose,"nose");
+  var leftEye = getPartScore(pose,"leftEye");
+  var rightEye = getPartScore(pose,"rightEye");
+  var leftEar = getPartScore(pose,"leftEar");
+  var rightEar = getPartScore(pose,"rightEar");
+
+  var sum = 0;
+
+  if(nose > 0.8)
+    sum ++;
+  if(leftEye>0.8)
+    sum++;
+  if(rightEye > 0.8)
+  sum++;
+  if(leftEar > 0.8)
+  sum++;
+  if(rightEar > 0.8)
+  sum++;
+
+  if(sum > 0)
+    return true;
+  return false;
+}
+
+function aveShowFace(movement){
+  var l = movement.length;
+  var maxValue = 0;
+  var curValue = 0;
+  for(let i = 0; i<movement.length;i++){
+    for(let j = 0; j < movement[i].poseGoup.length;j++){
+      if(showFace(movement[i].poseGoup[j]))
+        curValue ++;
+      maxValue++;
+    }
+  }
+  if(maxValue == 0)
+  return 0;
+
+  return curValue / maxValue;
+  
+}
+
+//wirst is shoulder
+function wristDistace(pose){
+  var leftWrist = getPosePart(pose,"leftShoulder");
+  var rightWrist = getPosePart(pose,"rightShoulder");
+  var leftHip = getPosePart(pose,"leftHip");
+  var rightHip = getPosePart(pose,"rightHip");
+
+  var distXleft = abs(leftWrist.position.x - leftHip.position.x);
+  var distXright = abs(rightWrist.position.x  - leftWrist.position.x);
+
+  return (distXleft+distXright)/2; 
+}
+
+function aveWristDistance(movement){
+  var l = movement.length;
+  var ave = 0;
+  for(let i = 0; i<movement.length;i++){
+    var tmp = 0;
+    for(let j = 0; j < movement[i].poseGoup.length;j++){
+      tmp += wristDistace(movement[i].poseGoup[j]);
+    }
+    if(movement[i].poseGoup.length != 0)
+    tmp = tmp / movement[i].poseGoup.length;
+    ave += tmp;
+  }
+  if(movement.length!=0)
+  return ave / movement.length;
+  return 0;
+}
+
+export function getStringData(){
+    var output = "";
+    var gM = groupMotion(poses);
+    var count = 0;
+    for(let i = 0; i<gM.length; i++){
+      var value = aveWristDistance(gM[i]);
+      var showEye = aveShowFace(gM[i]);
+      var fullRange = isFullRange(gM[i]);
+      output += "PushUp " + i + " :\n";
+      
+      if(value < 80)
+        output += "-Put your Elbow a bit together\n";
+      else if(value < 110)
+        output += "-Your Elbow are nice!\n";
+      else 
+        output += "-Put Elbow further apart\n";
+
+      if(showEye<0.5)
+        output += "-Show in the camara..\n";
+      else
+        output += "-You look at the bottom..\n";
+
+      if(fullRange){
+        output += "-Nice Range of motion!\n";
+        count ++;
+      }
+    
+      else 
+        output += "-Go lower!\n";
+    }
+    output += "You did " + count + " correct PushUps\n";
+    return output;
+}
+
+
+
+function isFullRange(movement){
+
+}
+
+
+function abs(value) {
+  if(value > 0)return value;
+  return value * (-1);
+}
+
+
 
 function groupMotion(pos) {
   var gSP = groupSectionPoses(pos);
+  
   const holdStartPos = 5;
   var motion = [];
   var tmpMotion = [];
@@ -86,10 +207,12 @@ function groupMotion(pos) {
     }
   }
   return motion;
+
 }
 
 function groupSectionPoses(pos) {
   var secPos = addSectionPoses(pos);
+  
   var curSection = secPos[0].section;
   var tmpPos = [];
   tmpPos.push(secPos[0].pose);
@@ -123,6 +246,8 @@ function addSectionPoses(pos) {
       sectionPose.push({ section: detectMoveSection(pos[i]), pose: pos[i] });
     }
   }
+  if(sectionPose == null)
+  return null;
 
   var newSecPose = [];
   //first check bundary start
