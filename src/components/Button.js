@@ -1,10 +1,14 @@
 import React from 'react';
 
 const style = {
-  fontSize: 40,
-  margin: 20,
+  fontSize: 50,
   outline: 'none',
   color: '#fff',
+  position: 'fixed',
+  bottom: '10px',
+  right: '10px',
+  padding: '20px',
+  width: '350px',
 };
 
 const Button = ({ isStop, setStop }) => <button

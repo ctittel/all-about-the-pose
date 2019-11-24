@@ -1,16 +1,5 @@
 import { updateSimulation } from './simulationStartStop';
 
-const posesNr = [100];
-const nr = 0;
-let boolean = 1; //true initial value (bool) -> return type of function checkRestofFrames()
-let left;
-let right;
-let leftAfter;
-let rightAfter;
-let angleHigh = 170;
-let angleLow = 50;
-let angleLowMatched = 0; //false inital value (bool)
-let angleHighMatched = 0; //false inital value (bool)
 const poses = []; // all poses recorded
 
 var start = false;
@@ -32,15 +21,18 @@ var ended = false;
 
 //First
 export const updatePoses = (pose) => {
-  updateSimulation();
+  // updateSimulation();
   if (!ended) {
     if (start && !stop) {
-      // console.log(movSectionCheck(pose, "start"));
       poses.push(pose);
     }
     else if (start && stop) {
       console.log("Start calculating the Data...");
-
+      console.log(showData());
+      console.log("------");
+      console.log(groupSectionPoses(poses));
+      console.log("-------");
+      console.log(groupMotion(poses));
       console.log("Finish calculating the Data...");
       ended = true;
     }
@@ -49,123 +41,143 @@ export const updatePoses = (pose) => {
     console.log("Waiting for next Measure...");
 }
 
-function movSectionCheck(pose, sec) {
-  switch (sec) {
-    case "start": return isStart(pose);
-    default: return false;
+//Ändern weil Objercdt
+function showData(){
+  let sP = addSectionPoses(poses);
+  for(let i = 0; i < sP.length; i++){
+    console.log("Index: " + i + ", " + sP[i].section);
   }
 }
 
-function isStart(pose) {
-  var anyLeft = angleParts(pose, "leftWrist", "leftShoulder", "leftElbow");
-  var anyRight = angleParts(pose, "rightWrist", "rightShoulder", "rightElbow");
+function groupMotion(pos){
+  var gSP = groupSectionPoses(pos);
+  const holdStartPos = 5;
+  var motion = [];
+  var tmpMotion = [];
+  //cutt the beginning
+  
+  var cut = 0;
+  while(cut < gSP.length ){
+    if(gSP[cut].section.localeCompare("start")==0 && gSP[cut].poseGoup.length > holdStartPos)
+      break;
+    cut++;
+  }
+  var cutGSP = cutArray(gSP,cut);
+  
+  tmpMotion.push(cutGSP[0]);
+  for(let i = 1; i < cutGSP.length; i++){
+      tmpMotion.push(cutGSP[i]);
+      if(cutGSP[i].section.localeCompare("start")==0){
+            motion.push(tmpMotion);
+            tmpMotion = [];
+            tmpMotion.push(cutGSP[i]);
+      }
+  }
+  return motion;
+}
 
-  var score = (getPartScore(pose,"leftWrist") + getPartScore(pose,"leftShoulder") + getPartScore(pose,"leftElbow")) / 3
+function groupSectionPoses(pos){
+    var secPos = addSectionPoses(pos);
+    var curSection = secPos[0].section;
+    var tmpPos = [];
+    tmpPos.push(secPos[0].pose);
+    var groupSection = [];
+    for(let i = 1; i < secPos.length; i++){
+        var tmpSection = secPos[i].section;
+        if(curSection.localeCompare(tmpSection)==0){
+          tmpPos.push(secPos[i].pose);
+        }
+        else{
+          groupSection.push({section: curSection, poseGoup: tmpPos});
+          curSection = tmpSection;
+          tmpPos = [];
+        }
+    }
 
-  /*
-  var slS = getPartScore(pose,"leftShoulder");
-  var slW = getPartScore(pose,"leftWrist");
-  var slE = getPartScore(pose,"leftElbow");
+    //clearSection
+    var newGS = [];
+    for(let i = 0; i < groupSection.length; i++){
+      if(groupSection[i].poseGoup.length > 0)
+        newGS.push(groupSection[i]);
+    }
+    return newGS;
+}
 
-  console.log("leftShoulder: " + slS+ " leftWrist:" + slW + " leftElbow:" +slE);
-  */
+function addSectionPoses(pos){
+  let sectionPose = []
+  for(let i = 0; i < pos.length ; i++){
+    let sec = detectMoveSection(pos[i]);
+    if(sec.localeCompare("undefined") != 0){
+        sectionPose.push({section:detectMoveSection(pos[i]), pose: pos[i]});
+    }
+  }
+  
+  return sectionPose;
+}
 
-  //console.log(score);
 
-  if(anyLeft > 150 && anyRight > 150)
-    return "True with accuracy: " + score;
+
+// Movement Start -> Middle -> Low -> Bottom -> Low -> Middle -> Start
+function detectMoveSection(pose) {
+    //Values from Felix:
+    let aStartFrom = 190;
+    let aMiddleFrom = 170;
+    let aLowFrom = 140;
+    let aBottomFrom = 90;
     
-  return "Wrong with accuracy: " + score;
-}
-
-
-
-function calculatePushUp(posesNr) {
-  // First Case must be the initial position, if wrong there is an output
-  // maby change this to the first 5 frames if this requirement is matched
-  setLandR(left, right, posesNr, 0);
-  if (left < angleHigh && right < angleHigh) {
-    console.log("Ups this PushUp was Wrong! First Position is Wrong\nAngle left: %f\nAngle right: %f", left, right)
-    return;
-  }
-  let counter = 0;
-
-  for (let x = 0; x < posesNr.length && x + 1 <= posesNr.length; x++) {
-    //get angle of new points
-    setLandR(left, right, posesNr, x);
-    setLandR(leftAfter, rightAfter, posesNr, x + 1);
-    // is the next frame already smaller than the first one? if yes 
-    if (left < 40 && right < 40)
-      angleLowMatched = 1;
-
-    if (angleLowMatched == 1) {
-      //now check whether the rest is rising by calling helper function checkRestofFrames()
-      if (checkRestofFrames(posesNr, x)) {
-        console.log("Amazing you have done an exellent Push Up");
-        return;
-      }
-      console.log("Ups this PushUp was Wrong! Please improve and do it agian!");
-      return;
-      //is angle smaller than 40 degree matched && all following movements increase to nearly 170 degree?
+    var angle = getAngleElbos(pose);
+    
+    if(angle == -1){
+      console.log("Angle -1 was to  weak!");
+      return "undefined"
     }
-    else if (leftAfter > left && rightAfter > right) {
-      console.log("Ups this PushUp was Wrong! You didn't achieved the lower Position and went back up!!!")
-      return;
-    }
-  }
-  console.log("Ups this PushUp was Wrong! (after all Frames)");
+    
+    if(angle < aBottomFrom)
+      return "bottom";
+    if(angle < aLowFrom)
+      return "low";
+    if(angle < aMiddleFrom)
+      return "middle";
+    if(angle < aStartFrom)
+      return "start";  
+    
+    return "undefined";
 }
 
-// checks whether rest of all angels are bigger than before && 170 degrees are achieved
-function checkRestofFrames(posesNr, nr) {
-  for (nr; nr < posesNr.length && nr + 1 <= posesNr.length; nr++) {
-    setLandR(left, right, posesNr, nr);
-    setLandR(leftAfter, rightAfter, posesNr, nr + 1);
-    if (leftAfter > left && rightAfter > right) {
-      // is the initial position achieved
-      if (left >= angleHigh && right >= angleHigh) {
-        return boolean = 1;
-      }
-    }
-    else {
-      boolean = 0;
-    }
-  }
-  //last case checks whether last frame angles are bigger than angles bevor and gt than 170 degrees
-  setLandR(left, right, posesNr, nr);
-  setLandR(leftAfter, rightAfter, posesNr, nr - 1);
-  if (leftAfter < left && rightAfter < right) {
-    // is the initial position achieved
-    if (left >= angleHigh && right >= angleHigh) {
-      return boolean = 1;
-    }
-    boolean = 0;
-  }
-  return boolean;
+
+//Both angles of elbos need to be good -> angle from both  else return -1 as invalid
+function getAngleElbos(pose){
+
+  var leftA = angleParts(pose, "leftWrist", "leftShoulder", "leftElbow");
+  var rightA = angleParts(pose, "rightWrist", "rightShoulder", "rightElbow");
+
+  var angle = (leftA + rightA)/2;
+  //console.log("left:" + leftA);
+  //console.log("rigth:" + rightA);
+  var scoreLeft = getPartScore(pose, "leftWrist", "leftShoulder", "leftElbow");
+  var scoreRight = getPartScore(pose, "rightWrist", "rightShoulder", "rightElbow");
+
+  if(scoreLeft != -1 && scoreRight != -1)
+    return angle;
+  
+  return -1;
 }
 
-//function that sets the values of left and right by calling
-function setLandR(anyLeft, anyRight, posesNr, xy) {
-  anyLeft = angleParts(posesNr[xy], "leftWrist", "leftShoulder", "leftElbow");
-  anyRight = angleParts(posesNr[xy], "rightWrist", "rightShoulder", "rightElbow");
+//If the Angel is valuable it returns the sum else it returns -1
+function getAngleScore(pose,part1,part2,part3){
+  var s1 = getPartScore(pose,part1);
+  var s2 = getPartScore(pose,part2);
+  var s3 = getPartScore(pose,part3);
+
+  var sum = (s1 + s2 + s3) / 3;
+
+  //Less more po
+  if(sum > 0.32)
+    return sum;
+  
+  return -1;
 }
 
-//Returns the first index from pose of starting doing the motion
-function detectStartMotion(p) {
-  /* Measure the Frames with be in scope for the discussion "Is it a good starting Point" If number higher more datas but if its to hight
-  you look in a different motion We need hight frame rate!*/
-  var crit = 1;
-  var thinkStart;
-
-}
-
-function detectedEndMotion(p) {
-  var start = detectStartMotion(p);
-  start++;
-  for (let i = start; i < p.length; i++) {
-
-  }
-}
 
 // cutArray([0,1,2,3,4,5..],2) -> [2,3,4,5]
 function cutArray(a, index) {
@@ -176,20 +188,6 @@ function cutArray(a, index) {
     }
   }
   return newA;
-}
-
-
-//Drops from poses the first Motion detected
-function dropFirstMotion(p) {
-  var newPoses = [];
-  var startIndexNew = detectStartMotion() + 1;
-  //Copie current poses the newPoses exept the first Motion
-  for (let i = 0; i < p.length; i++) {
-    if (i >= startIndexNew) {
-      newPoses.push(p[i]);
-    }
-  }
-  return newPoses;
 }
 
 
@@ -211,7 +209,7 @@ function getPartScore(pose,part){
     let suff = 1.0; // Is the point important enough?
     let score = getPosePart(pose,part).score;
     
-    if(score < suff)
+    if(score <= suff)
       return score;
     
     return -1;

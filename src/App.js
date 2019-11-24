@@ -1,13 +1,15 @@
+/* eslint-disable */
+
 import React, { useState } from 'react';
 import Header from './components/Header';
 import Button from './components/Button';
 import logo from './logo.svg';
 import Panel from './components/ControlPanel';
+import { startMeasure, endMeasure } from './libs/pose';
 import './App.css';
 import './libs/camera';
 import SampleSpeech from './components/Speech'
 import Dictaphone from './components/Voice'
-
 
 function App() {
   const [isStop, setStop] = useState(true);
@@ -18,13 +20,21 @@ function App() {
       <header className="App-header">
         <Button
           isStop={isStop}
-          setStop={() => setStop(!isStop)}
+          setStop={() => {
+            if (!isStop) {
+              endMeasure();
+            } else {
+              startMeasure();
+            }
+            setStop(!isStop);
+          }}
         />
         <div id='main'>
           <video id="video" playsInline={true}
             style={{ transform: 'scaleX(-1)', display: 'none' }}/>
           <canvas id="output" />
         </div>
+        { window.motions && window.motions.length > 0 ? `You did ${window.motions.length} push ups` : '' }
       </header>
     </div>
   );
