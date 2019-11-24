@@ -4,7 +4,7 @@ if (annyang) {
     // Let's define a command.
     annyang.debug();
     var commands = {
-        'hello world': function () { console.log('Hello'); },
+        'hello world': function () { console.log('I am sorry john I cannot let you do that'); },
         'open google': function () { window.open("https://google.com"); }
     };
 
@@ -18,6 +18,7 @@ if (annyang) {
     annyang.addCallback('result', function () {
         console.log('sound stopped');
     });
+
     // Start listening.
     annyang.start();
 }
