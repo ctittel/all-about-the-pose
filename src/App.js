@@ -5,6 +5,8 @@ import logo from './logo.svg';
 import Panel from './components/ControlPanel';
 import './App.css';
 import './libs/camera';
+import SampleSpeech from './components/Speech'
+import Dictaphone from './components/Voice'
 
 
 function App() {
@@ -12,6 +14,7 @@ function App() {
   return (
     <div className="App">
       <Header />
+      <Dictaphone />
       <header className="App-header">
         <Button
           isStop={isStop}
