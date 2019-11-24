@@ -5,7 +5,7 @@ import Header from './components/Header';
 import Button from './components/Button';
 import logo from './logo.svg';
 import Panel from './components/ControlPanel';
-import { startMeasure, endMeasure, newMeasure } from './libs/pose';
+import { startMeasure, endMeasure, newMeasure, getStringData } from './libs/pose';
 import './App.css';
 import './libs/camera';
 // import './components/Annyang'
@@ -18,14 +18,21 @@ function App() {
   const [speechActivated, setSpeech] = useState(false);
   if (speechActivated === false) {
     setSpeech(true);
-    activateAnnyang(() => {
+    activateAnnyang(async () => {
+      await setTimeout(() => {}, 1500);
+      console.log('START');
       speak_text('Measurement started');
       startMeasure();
       setStop(false);
-    }, () => {
+    }, async () => {
+      await setTimeout(() => {}, 1500);
+      console.log('END');
       speak_text('Measurement ended');
       endMeasure();
       setStop(true);
+      const output = getStringData();
+      speak_text(output);
+      newMeasure();
     }); 
   }
   return (
@@ -34,10 +41,18 @@ function App() {
       <header className="App-header">
         <Button
           isStop={isStop}
-          setStop={() => {
+          setStop={async () => {
+            
             if (!isStop) {
+              await setTimeout(() => {}, 1500);
+              console.log('END');
               endMeasure();
+              const output = getStringData();
+              speak_text(output);
+              newMeasure();
             } else {
+              await setTimeout(() => {}, 1500);
+              console.log('START');
               startMeasure();
             }
             setStop(!isStop);
@@ -48,7 +63,6 @@ function App() {
             style={{ transform: 'scaleX(-1)', display: 'none' }}/>
           <canvas id="output" />
         </div>
-        <button onClick={() => newMeasure()}>RESET</button>
         { window.motions && window.motions.length > 0 ? `You did ${window.motions.length} push ups` : '' }
       </header>
     </div>
