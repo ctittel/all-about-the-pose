@@ -1,6 +1,6 @@
 import { updateSimulation } from './simulationStartStop';
 
-const poses = []; // all poses recorded
+var poses = []; // all poses recorded
 
 var start = false;
 var stop = false;
