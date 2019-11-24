@@ -9,4 +9,5 @@ yarn-error.log
 yalc.lock
 .yalc
 **/.DS_Store
+build
 build/

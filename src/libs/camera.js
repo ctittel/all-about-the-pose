@@ -22,8 +22,8 @@ import {drawBoundingBox, drawKeypoints, drawSkeleton, isMobile, tryResNetButtonN
 import { getPositivePatterns } from 'fast-glob/out/managers/tasks';
 import { updatePoses }   from './pose';
 
-const videoWidth = 600; //600 default
-const videoHeight = 500; //500 default
+const videoWidth = 360;
+const videoHeight = 460; //500 default
 const stats = new Stats();
 
 /**
@@ -113,7 +113,10 @@ function setupGui(cameras, net) {
     guiState.camera = cameras[0].deviceId;
   }
 
-  const gui = new dat.GUI({width: 300});
+  const gui = new dat.GUI({width: 200});
+
+  // close by default
+  gui.close();
 
   let architectureController = null;
   guiState[tryResNetButtonName] = function() {
