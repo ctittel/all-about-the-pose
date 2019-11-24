@@ -9,14 +9,13 @@ import { startMeasure, endMeasure } from './libs/pose';
 import './App.css';
 import './libs/camera';
 import SampleSpeech from './components/Speech'
-import Dictaphone from './components/Voice'
+import './components/Annyang'
 
 function App() {
   const [isStop, setStop] = useState(true);
   return (
     <div className="App">
       <Header />
-      <Dictaphone />
       <header className="App-header">
         <Button
           isStop={isStop}
