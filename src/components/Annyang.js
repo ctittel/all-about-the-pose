@@ -6,8 +6,8 @@ export function activateAnnyang(startFn, stopFn) {
     // Let's define a command.
     annyang.debug();
     var commands = {
-      'hello world': function () { console.log('I am sorry john I cannot let you do that'); },
-      'open google': function () { window.open("https://google.com"); },
+    //   'hello world': function () { console.log('I am sorry john I cannot let you do that'); },
+    //   'open google': function () { window.open("https://google.com"); },
       'start': function () {
         startFn();
       },

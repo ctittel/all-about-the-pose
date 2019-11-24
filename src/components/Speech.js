@@ -43,4 +43,4 @@ export default function speak_text(text) {
 }
 
 // speak_text('test');
-speak_text('Hello. How are you?');
+speak_text('All systems initialized');
