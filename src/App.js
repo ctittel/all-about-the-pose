@@ -9,7 +9,7 @@ import { startMeasure, endMeasure, newMeasure } from './libs/pose';
 import './App.css';
 import './libs/camera';
 // import './components/Annyang'
-import './components/Speech'
+import speak_text from './components/Speech'
 // import SampleSpeech from './components/Speech'
 import { activateAnnyang } from './components/Annyang'
 
@@ -19,9 +19,11 @@ function App() {
   if (speechActivated === false) {
     setSpeech(true);
     activateAnnyang(() => {
+      speak_text('Measurement started');
       startMeasure();
       setStop(false);
     }, () => {
+      speak_text('Measurement ended');
       endMeasure();
       setStop(true);
     }); 

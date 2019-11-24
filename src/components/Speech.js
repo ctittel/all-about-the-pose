@@ -2,7 +2,7 @@ import React from 'react';
 import Speech from 'speak-tts'
 
 const speech = new Speech() // will throw an exception if not browser supported
-if(speech.hasBrowserSupport()) { // returns a boolean
+if (speech.hasBrowserSupport()) { // returns a boolean
     console.log("speech synthesis supported")
 }
 
@@ -18,11 +18,11 @@ if(speech.hasBrowserSupport()) { // returns a boolean
 
 speech.init({
     'volume': 1,
-     'lang': 'en-GB',
-     'rate': 1,
-     'pitch': 1,
-     'voice':'Google UK English Male',
-     'splitSentences': true
+    'lang': 'en-GB',
+    'rate': 1,
+    'pitch': 1,
+    'voice': 'Google UK English Male',
+    'splitSentences': true
 }).then((data) => {
     // The "data" object contains the list of available voices and the voice synthesis params
     console.log("Speech is ready, voices are available", data)
@@ -32,7 +32,7 @@ speech.init({
 
 speech.setLanguage('en-GB')
 
-export function speak_text(text) {
+export default function speak_text(text) {
     speech.speak({
         text: text,
     }).then(() => {

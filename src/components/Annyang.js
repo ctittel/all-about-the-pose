@@ -15,7 +15,7 @@ export function activateAnnyang(startFn, stopFn) {
         stopFn();
       }
     };
-
+    annyang.setLanguage('en-GB');
     // Add our commands to annyang
     annyang.addCommands(commands);
 
