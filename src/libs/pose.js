@@ -30,7 +30,7 @@ var ended = false;
 
 //First
 export const updatePoses = (pose) => {
-  updateSimulation();
+  //updateSimulation();
   if (!ended) {
     if (start && !stop) {
       poses.push(pose);
@@ -111,16 +111,32 @@ function groupSectionPoses(pos){
 }
 
 function addSectionPoses(pos){
-  let sectionPose = []
+  let sectionPose = [];
   for(let i = 0; i < pos.length ; i++){
     let sec = detectMoveSection(pos[i]);
-    if(sec.localeCompare("undefined") != 0){
-        sectionPose.push({section:detectMoveSection(pos[i]), pose: pos[i]});
+    if(sec.localeCompare("undefined") != 0) {
+      sectionPose.push({section:detectMoveSection(pos[i]), pose: pos[i]});
     }
   }
-  
-  return sectionPose;
+
+  var newSecPose = [];
+  //first check bundary start
+  if(sectionPose[0].section.localeCompare(sectionPose[1].section)==0)
+  newSecPose.push(sectionPose[0]);
+  for(let i = 1; i< sectionPose.length -1; i++){
+      var pivot = sectionPose[i];
+      var left = sectionPose[i-1];
+      var right = sectionPose[i+1];
+      if(left.section.localeCompare(pivot.section) == 0 || right.section.localeCompare(pivot.section) == 0)
+        newSecPose.push(pivot);
+  }
+  if(sectionPose[sectionPose.length-1].section.localeCompare(sectionPose[sectionPose.length])==0)
+  newSecPose.push(sectionPose[sectionPose.length]);
+
+  return newSecPose;
 }
+
+
 
 
 
