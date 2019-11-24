@@ -17,11 +17,20 @@ export function endMeasure() {
   }
 }
 
+export function newMeasure(){
+  start = false;
+  stop = false;
+  ended = false;
+  poses = [];
+}
+
+
+
 var ended = false;
 
 //First
 export const updatePoses = (pose) => {
-  // updateSimulation();
+  updateSimulation();
   if (!ended) {
     if (start && !stop) {
       poses.push(pose);
@@ -37,8 +46,6 @@ export const updatePoses = (pose) => {
       ended = true;
     }
   }
-  else
-    console.log("Waiting for next Measure...");
 }
 
 //Ändern weil Objercdt

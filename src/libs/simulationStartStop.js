@@ -3,7 +3,7 @@ import { startMeasure, endMeasure }   from './pose';
 var simV = 0;
 
 var startFrame = 0;
-var endFrame  = 500;
+var endFrame  = 50;
 
 var started = false;
 var finished = false;
