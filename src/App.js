@@ -8,11 +8,24 @@ import Panel from './components/ControlPanel';
 import { startMeasure, endMeasure, newMeasure } from './libs/pose';
 import './App.css';
 import './libs/camera';
-import './components/Annyang'
+// import './components/Annyang'
 import './components/Speech'
+// import SampleSpeech from './components/Speech'
+import { activateAnnyang } from './components/Annyang'
 
 function App() {
   const [isStop, setStop] = useState(true);
+  const [speechActivated, setSpeech] = useState(false);
+  if (speechActivated === false) {
+    setSpeech(true);
+    activateAnnyang(() => {
+      startMeasure();
+      setStop(false);
+    }, () => {
+      endMeasure();
+      setStop(true);
+    }); 
+  }
   return (
     <div className="App">
       <Header />
