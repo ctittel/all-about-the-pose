@@ -21,7 +21,7 @@ var ended = false;
 
 //First
 export const updatePoses = (pose) => {
-  updateSimulation();
+  // updateSimulation();
   if (!ended) {
     if (start && !stop) {
       poses.push(pose);
