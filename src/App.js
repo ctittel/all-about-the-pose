@@ -8,8 +8,8 @@ import Panel from './components/ControlPanel';
 import { startMeasure, endMeasure, newMeasure } from './libs/pose';
 import './App.css';
 import './libs/camera';
-import SampleSpeech from './components/Speech'
 import './components/Annyang'
+import './components/Speech'
 
 function App() {
   const [isStop, setStop] = useState(true);

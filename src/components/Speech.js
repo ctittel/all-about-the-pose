@@ -1,19 +1,46 @@
 import React from 'react';
-import Speech from 'react-speech';
+import Speech from 'speak-tts'
 
-const style = {
-  fontSize: 40,
-  margin: 20,
-  outline: 'none',
-  color: '#fff',
-};
+const speech = new Speech() // will throw an exception if not browser supported
+if(speech.hasBrowserSupport()) { // returns a boolean
+    console.log("speech synthesis supported")
+}
 
-const SampleSpeech = () => <Speech   text="
-Seit dem 1. Oktober 2019 ist Prof. Thomas F. Hofmann Präsident der Technischen Universität München (TUM). Der Lebensmittel- und Naturstoffchemiker möchte Menschen miteinander in Kontakt bringen und den Diskurs zwischen Universität und Gesellschaft stärken.  "
-pitch="0.5"
-rate="1"
-volume="0.1"
-lang="en-GB"
-voice="Daniel"/>
+// speech.init({
+//     'lang': 'en-GB',
+//     'voice':'Google UK English Male'
+// }).then((data) => {
+//     // The "data" object contains the list of available voices and the voice synthesis params
+//     console.log("Speech is ready, voices are available", data)
+// }).catch(e => {
+//     console.error("An error occured while initializing : ", e)
+// })
 
-export default SampleSpeech;
+speech.init({
+    'volume': 1,
+     'lang': 'en-GB',
+     'rate': 1,
+     'pitch': 1,
+     'voice':'Google UK English Male',
+     'splitSentences': true
+}).then((data) => {
+    // The "data" object contains the list of available voices and the voice synthesis params
+    console.log("Speech is ready, voices are available", data)
+}).catch(e => {
+    console.error("An error occured while initializing : ", e)
+})
+
+speech.setLanguage('en-GB')
+
+export function speak_text(text) {
+    speech.speak({
+        text: text,
+    }).then(() => {
+        console.log("Success !")
+    }).catch(e => {
+        console.error("An error occurred :", e)
+    })
+}
+
+// speak_text('test');
+speak_text('Hello. How are you?');

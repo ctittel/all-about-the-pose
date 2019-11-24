@@ -14,8 +14,8 @@
     "react-scripts": "3.2.0",
     "stats.js": "^0.17.0",
     "express": "^4.14.0",
-    "react-speech": "1.0.2",
-    "annyang": "2.6.1"
+    "annyang": "2.6.1",
+    "speak-tts": "2.0.8"
   },
   "scripts": {
     "start": "node server.js #Production only!",
