@@ -151,11 +151,12 @@ export function getStringData(){
         output += "-Your Elbow are nice!\n";
       else 
         output += "-Put Elbow further apart\n";
-
+       
+      console.log(showEye);
       if(showEye<0.5)
-        output += "-Show in the camara..\n";
-      else
-        output += "-You look at the bottom..\n";
+      output += "-You are looking at the bottom!\n";
+        else
+      output += "-You are looking at the camara!\n";
 
       if(fullRange){
         output += "-Nice Range of motion!\n";
