@@ -44,9 +44,10 @@ export const updatePoses = (pose) => {
       console.log("------");
       console.log(groupSectionPoses(poses));
       console.log("-------");
-      console.log(groupMotion(poses));
+      
       showIt(poses);
       */
+      console.log(groupMotion(poses));
       console.log(getStringData());
       console.log("Finish calculating the Data...");
       ended = true;
@@ -138,6 +139,7 @@ export function getStringData(){
     var gM = groupMotion(poses);
     var count = 0;
     for(let i = 0; i<gM.length; i++){
+      if(gM[i].length>3){
       var value = aveWristDistance(gM[i]);
       var showEye = aveShowFace(gM[i]);
       var fullRange = isFullRange(gM[i]);
@@ -163,6 +165,7 @@ export function getStringData(){
       else 
         output += "-Go lower!\n";
     }
+    }
     output += "You did " + count + " correct PushUps\n";
     return output;
 }
@@ -170,7 +173,11 @@ export function getStringData(){
 
 
 function isFullRange(movement){
-
+    var bot = false;
+    for(let i = 0; i<movement.length; i++)
+      if(movement[i].section.localeCompare("bottom") == 0)
+        bot = true;
+    return bot;
 }
 
 
