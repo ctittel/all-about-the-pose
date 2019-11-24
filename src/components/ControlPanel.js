@@ -11,8 +11,8 @@ const customStyles = {
   }
 };
 
-const Panel = ({ isOpen, setIsOpen }) => <Modal 
-  isOpen={isOpen} style={customStyles}>MODAL
+const Panel = ({ isOpen, setIsOpen, content }) => <Modal 
+  isOpen={isOpen} style={customStyles}>{ content }
   <button onClick={() => setIsOpen(false)}>close</button>
 </Modal>;
 
