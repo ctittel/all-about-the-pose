@@ -1,8 +1,10 @@
 ![our logo](https://raw.githubusercontent.com/ctonic/all-about-the-pose/master/public/logo-name.png)
 
+**Our submission for the HackaTum 2018**
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Link: [Herokuapp](http://all-about-that-pose.herokuapp.com/)
+[Try it out on Herokuapp](https://all-about-that-pose.herokuapp.com/)
 
 ## Setup
 - npm install
