@@ -28,7 +28,7 @@ export function activateAnnyang(startFn, stopFn) {
     });
 
     // Start listening.
-    annyang.start();
+    annyang.start({ continuous: false });
   }
 
 }
