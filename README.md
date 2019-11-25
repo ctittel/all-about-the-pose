@@ -1,6 +1,6 @@
 ![our logo](https://raw.githubusercontent.com/ctonic/all-about-the-pose/master/public/logo-name.png)
 
-**Our submission for the HackaTum 2018**
+**Our submission for the HackaTum 2019**
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
